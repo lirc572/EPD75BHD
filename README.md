@@ -1,6 +1,6 @@
 # EPD75BHD
 
-An ESP32 Arduino library for [Waveshare 7.5 inch E-Paper Display (880x528)](https://www.waveshare.com/wiki/7.5inch_HD_e-Paper_HAT)
+An ESP32 Arduino library for [Waveshare 7.5 inch 3-color E-Paper Display (880x528)](https://www.waveshare.com/wiki/7.5inch_HD_e-Paper_HAT)
 
 Demo:
 
@@ -11,13 +11,16 @@ Demo:
 - Developed in C++
 - Work out of the box
 - Initialize display in one line
+- Support Adafruit GFX fonts
 - Powerful formatted print function (`GFX::GFXPrintf`)
 - Display [PPM image](http://netpbm.sourceforge.net/doc/ppm.html) from SD card
 
 ## Installation
 
 - For Arduino IDE, download this repository as [a zip file](https://github.com/lirc572/EPD75BHD/archive/master.zip) and follow <https://www.arduino.cc/en/guide/libraries#toc4>
-- For [PlatformIO IDE](https://platformio.org/), clone this repository and copy the entire folder to your project's `/lib` folder
+- For [PlatformIO IDE](https://platformio.org/):
+  - Either clone this repository and copy the entire folder to your project's `/lib` folder
+  - Or if your project uses Git, add this repository as a submodule under your project's `/lib` folder
 
 ## Important Notes
 
@@ -39,6 +42,7 @@ Demo:
       - `1 0 0` (red)
   - Currently the PPM functions are relatively slow. E.g. when using `DrawPPM` with a picture of the same size as the display, it takes approximately 80 seconds to complete
   - **To convert your image to supported PPM format, use [this Python3 script](https://gist.github.com/lirc572/0fdbfd8610fab6bbfc02cbfdbb8b3077)**
+- This library supports Adafruid GFX fonts. Create your own font headers at <https://rop.nl/truetype2gfx/>
 
 ## Get Started
 
