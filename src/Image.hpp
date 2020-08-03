@@ -24,7 +24,7 @@ class Image {
         std::uint32_t imageSize;
         std::uint32_t widthByte;
         Image(std::uint16_t w, std::uint16_t h) : width(w), height(h) {
-            this->widthByte = (w % 8 == 0) ? (w / 8 ) : (w / 8 + 1);
+            this->widthByte = (w % 8 == 0) ? (w >> 3 ) : ((w >> 3) + 1);
             this->imageSize =  this->widthByte * h;
             std::printf("w=%d, h=%d, wb=%d\n", w, h, widthByte);
             std::printf("In Image(), about to new images, size=%d\n", imageSize);
@@ -40,7 +40,7 @@ class Image {
                 return GFXColor::WHITE; // if out of range, return White
             }
             std::uint32_t addr, offset;
-            addr = y * widthByte + x / 8;
+            addr = y * widthByte + (x >> 3);
             offset = 7 - x % 8;
             return (this->RYImage[addr] >> offset & 1) ? GFXColor::WHITE : GFXColor::RED;
         }
@@ -49,7 +49,7 @@ class Image {
                 return GFXColor::WHITE; // if out of range, return White
             }
             std::uint32_t addr, offset;
-            addr = y * widthByte + x / 8;
+            addr = y * widthByte + (x >> 3);
             offset = 7 - x % 8;
             return (this->BlackImage[addr] >> offset & 1) ? GFXColor::WHITE : GFXColor::BLACK;
         }
@@ -69,7 +69,7 @@ class Image {
                 return;
             }
             std::uint32_t addr;
-            addr = y * widthByte + x / 8;
+            addr = y * widthByte + (x >> 3);
             if (color == GFXColor::RED) {
                 this->RYImage[addr] = this->RYImage[addr] & ~(0x80 >> (x % 8));
             } else {
@@ -84,7 +84,7 @@ class Image {
                 return;
             }
             std::uint32_t addr;
-            addr = y * widthByte + x / 8;
+            addr = y * widthByte + (x >> 3);
             if (color == GFXColor::BLACK) {
                 this->BlackImage[addr] = this->BlackImage[addr] & ~(0x80 >> (x % 8));
             } else {

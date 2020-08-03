@@ -69,7 +69,7 @@ EPD75BHD::EPD75BHD(
     digitalWrite(this->CS_PIN , HIGH);
     digitalWrite(this->SCK_PIN, LOW);
 
-    //std::uint16_t Imagesize = ((this->WIDTH % 8 == 0) ? (this->WIDTH / 8 ) : (this->WIDTH / 8 + 1)) * this->HEIGHT;
+    //std::uint16_t Imagesize = ((this->WIDTH % 8 == 0) ? (this->WIDTH >> 3 ) : ((this->WIDTH >> 3) + 1)) * this->HEIGHT;
     //this->BlackImage       = (std::uint8_t*) malloc(Imagesize);
     //this->RYImage          = (std::uint8_t*) malloc(Imagesize);
 
@@ -185,7 +185,7 @@ void EPD75BHD::Init() {
 void EPD75BHD::ClearRed(void)
 {
 	std::uint32_t i, j, width, height;
-    width = (this->WIDTH % 8 == 0) ? (this->WIDTH / 8 ) : (this->WIDTH / 8 + 1);
+    width = (this->WIDTH % 8 == 0) ? (this->WIDTH >> 3 ) : ((this->WIDTH >> 3) + 1);
     height = this->HEIGHT;
 	this->WaitUntilNotBusy();
 	this->SendCommand(0x4F); 
@@ -208,7 +208,7 @@ void EPD75BHD::ClearRed(void)
 void EPD75BHD::ClearBlack(void)
 {
 	std::uint32_t i, j, width, height;
-    width = (this->WIDTH % 8 == 0) ? (this->WIDTH / 8 ) : (this->WIDTH / 8 + 1);
+    width = (this->WIDTH % 8 == 0) ? (this->WIDTH >> 3 ) : ((this->WIDTH >> 3) + 1);
     height = this->HEIGHT;
 	//this->WaitUntilNotBusy();
 	this->SendCommand(0x4F); 
@@ -229,7 +229,7 @@ void EPD75BHD::ClearBlack(void)
  **/
 void EPD75BHD::Clear() {
 	std::uint32_t i, j, width, height;
-    width = (this->WIDTH % 8 == 0) ? (this->WIDTH / 8 ) : (this->WIDTH / 8 + 1);
+    width = (this->WIDTH % 8 == 0) ? (this->WIDTH >> 3 ) : ((this->WIDTH >> 3) + 1);
     height = this->HEIGHT;
 	//this->WaitUntilNotBusy();
 	this->SendCommand(0x4F); 
@@ -268,7 +268,7 @@ void EPD75BHD::Clear() {
 void EPD75BHD::Display(const std::uint8_t *blackimage, const std::uint8_t *ryimage)
 {
     std::uint32_t i, j, width, height;
-    width = (this->WIDTH % 8 == 0)? (this->WIDTH / 8 ): (this->WIDTH / 8 + 1);
+    width = (this->WIDTH % 8 == 0)? (this->WIDTH >> 3 ): ((this->WIDTH >> 3) + 1);
     height = this->HEIGHT;
 	
 	this->SendCommand(0x4F); 

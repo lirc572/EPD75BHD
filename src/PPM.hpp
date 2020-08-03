@@ -241,19 +241,20 @@ std::uint8_t DrawPPM(fs::FS& fs, const char *path, GFX &gfx, std::uint32_t x, st
             //std::printf("color: (%d,%d,%d)\n", r, g, b);
             if (r && g && b)
             { // White
-                //std::printf("setPix(%d, WHITE)\n", bit_addr);
+                //std::printf("setPix(%d,%d, WHITE)\n", x+x_addr, y+y_addr);
                 gfx.GFXSetPixel(x+x_addr, y+y_addr, GFXColor::WHITE);
             }
             else if (r && !g && !b)
             { // Red
-                //std::printf("setPix(%d, RED)\n", bit_addr);
+                //std::printf("setPix(%d,%d, RED)\n", x+x_addr, y+y_addr);
                 gfx.GFXSetPixel(x+x_addr, y+y_addr, GFXColor::RED);
             }
             else if (!r && !g && !b)
             { // Black
-                //std::printf("setPix(%d, BLACK)\n", bit_addr);
+                //std::printf("setPix(%d,%d, BLACK)\n", x+x_addr, y+y_addr);
                 gfx.GFXSetPixel(x+x_addr, y+y_addr, GFXColor::BLACK);
             }
+            bit_addr++;
         }
     }
     //std::printf("file.available() == false:<\n");

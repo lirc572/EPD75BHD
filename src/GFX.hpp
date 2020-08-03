@@ -4,6 +4,8 @@
 
 #include <cstdint>
 #include "Image.hpp"
+#include "adafruitgfxfont.h"
+
 /**
  * image color
 **/
@@ -17,6 +19,12 @@ class GFX {
         std::uint32_t HEIGHTBYTE;
         std::uint16_t Imagesize;
         std::uint16_t ROTATION;
+        const GFXfont* font;
+        std::uint16_t cursorX;
+        std::uint16_t cursorY;
+        GFXColor fontColor;
+        void GFXPutChar(char c);
+        void GFXPutStr(char* str);
         void GFXClear(std::uint8_t* image, std::uint16_t color);
         void GFXClear(std::uint16_t color);
         void GFXSetPixel(std::uint8_t* image, std::uint16_t x, std::uint16_t y, std::uint16_t color);
@@ -28,6 +36,10 @@ class GFX {
         std::uint8_t* RYImage;
         GFX(std::uint32_t width, std::uint32_t height);
         ~GFX();
+        void GFXSetFont(const GFXfont* font);
+        void GFXSetColor(GFXColor color);
+        void GFXSetCursor(std::uint16_t x, std::uint16_t y);
+        void GFXPrintf(const char* fmt, ...);
         void GFXSetRotation(std::uint16_t rotation);
         void GFXClear(GFXColor color);
         void GFXSetPixel(std::uint16_t x, std::uint16_t y, GFXColor color);
