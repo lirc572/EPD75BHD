@@ -2,6 +2,10 @@
 
 An ESP32 Arduino library for Waveshare 7.5 inch E-Paper Display (880x528)
 
+Demo:
+
+![demo](./epd75bhd_demo.jpg)
+
 ## Features
 
 - Developed in C++
