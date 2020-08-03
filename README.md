@@ -1,6 +1,6 @@
 # EPD75BHD
 
-An ESP32 Arduino library for Waveshare 7.5 inch E-Paper Display (880x528)
+An ESP32 Arduino library for [Waveshare 7.5 inch E-Paper Display (880x528)](https://www.waveshare.com/wiki/7.5inch_HD_e-Paper_HAT)
 
 Demo:
 
