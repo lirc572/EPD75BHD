@@ -10,11 +10,16 @@ An ESP32 Arduino library for Waveshare 7.5 inch E-Paper Display (880x528)
 - Powerful formatted print function (`GFX::GFXPrintf`)
 - Display [PPM image](http://netpbm.sourceforge.net/doc/ppm.html) from SD card
 
+## Installation
+
+- For Arduino IDE, download this repository as [a zip file](https://github.com/lirc572/EPD75BHD/archive/master.zip) and follow <https://www.arduino.cc/en/guide/libraries#toc4>
+- For [PlatformIO IDE](https://platformio.org/), clone this repository and copy the entire folder to your project's `/lib` folder
+
 ## Important Notes
 
 - This library is built for the Espressif ESP32 using the Arduino Framework, it has not been tested on other platforms
 - This library uses at least *over 100KB RAM*, therefore it **CANNOT** be used for standard AVR based Arduino boards (which have only 2KB RAM)
-- This library works perfectly on [PlatformIO IDE](https://platformio.org/) (which is much more developer-friendly than the Arduino IDE)
+- This library works perfectly on PlatformIO IDE (which is much more developer-friendly than the Arduino IDE)
 - The methods whose name start with `GFX` only update the RAM, to reflect the change to the display, call the EPD class's `Display()` method
 - About PPM functions:
   - `PPM2IMG` function requires a huge amount of RAM (> 2 bits per pixel) because it creates a new `Image` class, use it with caution, or your program may crash
