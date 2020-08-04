@@ -127,3 +127,11 @@ Put the display at deep-sleep mode:
 ```C++
 epd.DeepSleep()
 ```
+
+## Future Plan
+
+- Screen rotation
+- No-buffer solution
+- Reduce time complexity
+- Dithering for color images
+- GUI framework
