@@ -115,9 +115,9 @@ void GFX::GFXSetPixel(std::uint8_t *image, std::uint16_t x, std::uint16_t y, std
 void GFX::GFXClearRect(std::uint8_t *image, std::uint16_t x_start, std::uint16_t y_start, std::uint16_t x_end, std::uint16_t y_end, std::uint16_t color)
 {
     std::uint16_t x, y;
-    for (y = y_start; y < y_end; y++)
+    for (y = y_start; y <= y_end; y++)
     {
-        for (x = x_start; x < x_end; x++)
+        for (x = x_start; x <= x_end; x++)
         {
             this->GFXSetPixel(image, x, y, color);
         }
