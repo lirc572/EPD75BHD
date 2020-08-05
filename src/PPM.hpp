@@ -9,7 +9,7 @@ Todo:
 - bitwise operation to set/clear correct bit
 */
 
-String ReadLine(fs::File& file)
+String ReadLine(fs::File &file)
 {
     String line("");
     char c;
@@ -33,7 +33,7 @@ String ReadLine(fs::File& file)
  *   2. File type not supported (not P3)
  *   3. File type not supported (Maxval not 1)
  **/
-std::uint8_t PPM2IMG(fs::FS& fs, const char *path, Image *&img)
+std::uint8_t PPM2IMG(fs::FS &fs, const char *path, Image *&img)
 {
     fs::File file = fs.open(path);
     if (!file)
@@ -111,7 +111,8 @@ std::uint8_t PPM2IMG(fs::FS& fs, const char *path, Image *&img)
         }
         else // "r g b"
         {
-            if (bit_addr >= area) {
+            if (bit_addr >= area)
+            {
                 std::printf("Read enough pixels!\n");
                 return 0; // done reading all pixels, ignore the rest of the file
             }
@@ -151,7 +152,7 @@ std::uint8_t PPM2IMG(fs::FS& fs, const char *path, Image *&img)
  *   2. File type not supported (not P3)
  *   3. File type not supported (Maxval not 1)
  **/
-std::uint8_t DrawPPM(fs::FS& fs, const char *path, GFX &gfx, std::uint32_t x, std::uint32_t y)
+std::uint8_t DrawPPM(fs::FS &fs, const char *path, GFX &gfx, std::uint32_t x, std::uint32_t y)
 {
     fs::File file = fs.open(path);
     if (!file)
@@ -228,7 +229,8 @@ std::uint8_t DrawPPM(fs::FS& fs, const char *path, GFX &gfx, std::uint32_t x, st
         }
         else // "r g b"
         {
-            if (bit_addr >= area) {
+            if (bit_addr >= area)
+            {
                 std::printf("Read enough pixels!\n");
                 return 0; // done reading all pixels, ignore the rest of the file
             }
@@ -242,17 +244,17 @@ std::uint8_t DrawPPM(fs::FS& fs, const char *path, GFX &gfx, std::uint32_t x, st
             if (r && g && b)
             { // White
                 //std::printf("setPix(%d,%d, WHITE)\n", x+x_addr, y+y_addr);
-                gfx.GFXSetPixel(x+x_addr, y+y_addr, GFXColor::WHITE);
+                gfx.GFXSetPixel(x + x_addr, y + y_addr, GFXColor::WHITE);
             }
             else if (r && !g && !b)
             { // Red
                 //std::printf("setPix(%d,%d, RED)\n", x+x_addr, y+y_addr);
-                gfx.GFXSetPixel(x+x_addr, y+y_addr, GFXColor::RED);
+                gfx.GFXSetPixel(x + x_addr, y + y_addr, GFXColor::RED);
             }
             else if (!r && !g && !b)
             { // Black
                 //std::printf("setPix(%d,%d, BLACK)\n", x+x_addr, y+y_addr);
-                gfx.GFXSetPixel(x+x_addr, y+y_addr, GFXColor::BLACK);
+                gfx.GFXSetPixel(x + x_addr, y + y_addr, GFXColor::BLACK);
             }
             bit_addr++;
         }

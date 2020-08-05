@@ -5,7 +5,8 @@
 #include <cstdint>
 
 /// Font data stored PER GLYPH
-typedef struct {
+typedef struct
+{
   std::uint16_t bitmapOffset; ///< Pointer into GFXfont->bitmap
   std::uint8_t width;         ///< Bitmap dimensions in pixels
   std::uint8_t height;        ///< Bitmap dimensions in pixels
@@ -15,7 +16,8 @@ typedef struct {
 } GFXglyph;
 
 /// Data stored for FONT AS A WHOLE
-typedef struct {
+typedef struct
+{
   std::uint8_t *bitmap;  ///< Glyph bitmaps, concatenated
   GFXglyph *glyph;       ///< Glyph array
   std::uint16_t first;   ///< ASCII extents (first char)

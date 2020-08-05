@@ -101,7 +101,7 @@ void GFX::GFXSetPixel(std::uint8_t *image, std::uint16_t x, std::uint16_t y, std
         //std::printf("SetPixel out of bound\n");
         return;
     }
-    std::uint32_t addr = (xx >> 3)  + yy * this->WIDTHBYTE;
+    std::uint32_t addr = (xx >> 3) + yy * this->WIDTHBYTE;
     if (color == 0x00)
     {
         image[addr] = image[addr] & ~(0x80 >> (xx % 8));
@@ -197,7 +197,8 @@ void GFX::GFXSetFont(const GFXfont *font)
     this->font = font;
 }
 
-void GFX::GFXSetColor(GFXColor color) {
+void GFX::GFXSetColor(GFXColor color)
+{
     this->fontColor = color;
 }
 
@@ -207,41 +208,49 @@ void GFX::GFXSetCursor(std::uint16_t x, std::uint16_t y)
     this->cursorY = y;
 }
 
-void GFX::GFXPutChar(char c) {
+void GFX::GFXPutChar(char c)
+{
     //std::printf("In GFXPutChar(%c)\n", c);
-    if (c >= 0x20 && c <= 0x7E) {
+    if (c >= 0x20 && c <= 0x7E)
+    {
         //print(c);
-        GFXglyph* glyph = &(this->font->glyph[c-this->font->first]);
-        std::uint8_t* bitmap = &(this->font->bitmap[glyph->bitmapOffset]);
+        GFXglyph *glyph = &(this->font->glyph[c - this->font->first]);
+        std::uint8_t *bitmap = &(this->font->bitmap[glyph->bitmapOffset]);
         std::uint16_t bitIndex, byte;
         std::uint8_t bitMask;
         std::uint8_t x, y;
-        for (x = 0; x < glyph->width; x++) {
-            for (y = 0; y < glyph->height; y++) {
+        for (x = 0; x < glyph->width; x++)
+        {
+            for (y = 0; y < glyph->height; y++)
+            {
                 bitIndex = x + glyph->width * y;
                 byte = bitIndex >> 3;
                 bitMask = 0x80 >> (bitIndex & 7);
                 //std::printf(" x(%d), y(%d), bitIndex(%d), byte(%d), bitMask(%d), pix(%d)\n", x, y, bitIndex, byte, bitMask, (bitmap[byte]&bitMask)?1:0);
                 //std::printf("  coord: (%d,%d)\n", this->cursorX + glyph->xOffset + x, this->cursorY + glyph->yOffset + y);
-                if (bitmap[byte] & bitMask) {
+                if (bitmap[byte] & bitMask)
+                {
                     this->GFXSetPixel(
                         this->cursorX + glyph->xOffset + x,
                         this->cursorY + glyph->yOffset + y,
-                        this->fontColor
-                    );
+                        this->fontColor);
                 }
             }
         }
-        this->cursorX += this->font->glyph[c-this->font->first].xAdvance;
-    } else if (c == '\n') {
+        this->cursorX += this->font->glyph[c - this->font->first].xAdvance;
+    }
+    else if (c == '\n')
+    {
         this->cursorY += this->font->yAdvance;
         this->cursorX = 0;
     }
 }
 
-void GFX::GFXPutStr(char* str) {
+void GFX::GFXPutStr(char *str)
+{
     //std::printf("in GFXPutStr(%s)", str);
-    for (const char* p = str; *p != '\0'; p++) {
+    for (const char *p = str; *p != '\0'; p++)
+    {
         //std::printf("char(%c)\n", *p);
         this->GFXPutChar(*p);
     }
@@ -252,7 +261,7 @@ void GFX::GFXPrintf(const char *fmt, ...)
     const char *p;
     std::va_list argp;
     int i;
-    char* s;
+    char *s;
     char fmtbuf[256];
     va_start(argp, fmt);
     for (p = fmt; *p != '\0'; p++)

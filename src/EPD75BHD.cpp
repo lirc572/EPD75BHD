@@ -10,30 +10,34 @@ std::uint32_t EPD75BHD::HEIGHT = 528;
 /**
  * Write one byte through SPI
  **/
-void EPD75BHD::SPI_WriteByte(std::uint8_t data) {
+void EPD75BHD::SPI_WriteByte(std::uint8_t data)
+{
     //SPI.beginTransaction(spi_settings);
     digitalWrite(this->CS_PIN, LOW);
 
     for (int i = 0; i < 8; i++)
     {
-        if ((data & 0x80) == 0) digitalWrite(this->MOSI_PIN, LOW); 
-        else                    digitalWrite(this->MOSI_PIN, HIGH);
+        if ((data & 0x80) == 0)
+            digitalWrite(this->MOSI_PIN, LOW);
+        else
+            digitalWrite(this->MOSI_PIN, HIGH);
 
         data <<= 1;
-        digitalWrite(this->SCK_PIN, HIGH);     
+        digitalWrite(this->SCK_PIN, HIGH);
         digitalWrite(this->SCK_PIN, LOW);
     }
 
     //SPI.transfer(data);
     digitalWrite(this->CS_PIN, HIGH);
-    //SPI.endTransaction();	
+    //SPI.endTransaction();
 }
 
 /**
  * Send one command through SPI
  **/
-void EPD75BHD::SendCommand(std::uint8_t Reg) {
-	digitalWrite(this->DC_PIN, LOW);
+void EPD75BHD::SendCommand(std::uint8_t Reg)
+{
+    digitalWrite(this->DC_PIN, LOW);
     digitalWrite(this->CS_PIN, LOW);
     this->SPI_WriteByte(Reg);
     digitalWrite(this->CS_PIN, HIGH);
@@ -42,7 +46,8 @@ void EPD75BHD::SendCommand(std::uint8_t Reg) {
 /**
  * Send one byte of data through SPI
  **/
-void EPD75BHD::SendData(std::uint8_t Data) {
+void EPD75BHD::SendData(std::uint8_t Data)
+{
     digitalWrite(this->DC_PIN, HIGH);
     digitalWrite(this->CS_PIN, LOW);
     this->SPI_WriteByte(Data);
@@ -58,32 +63,33 @@ EPD75BHD::EPD75BHD(
     std::uint8_t cs_pin,
     std::uint8_t rst_pin,
     std::uint8_t dc_pin,
-    std::uint8_t busy_pin
-) : GFX(880, 528), SCK_PIN(sck_pin), MOSI_PIN(mosi_pin), CS_PIN(cs_pin), RST_PIN(rst_pin), DC_PIN(dc_pin), BUSY_PIN(busy_pin) {
-    pinMode(this->BUSY_PIN,  INPUT);
-    pinMode(this->RST_PIN , OUTPUT);
-    pinMode(this->DC_PIN  , OUTPUT);
+    std::uint8_t busy_pin) : GFX(880, 528), SCK_PIN(sck_pin), MOSI_PIN(mosi_pin), CS_PIN(cs_pin), RST_PIN(rst_pin), DC_PIN(dc_pin), BUSY_PIN(busy_pin)
+{
+    pinMode(this->BUSY_PIN, INPUT);
+    pinMode(this->RST_PIN, OUTPUT);
+    pinMode(this->DC_PIN, OUTPUT);
     pinMode(this->SCK_PIN, OUTPUT);
     pinMode(this->MOSI_PIN, OUTPUT);
-    pinMode(this->CS_PIN , OUTPUT);
-    digitalWrite(this->CS_PIN , HIGH);
+    pinMode(this->CS_PIN, OUTPUT);
+    digitalWrite(this->CS_PIN, HIGH);
     digitalWrite(this->SCK_PIN, LOW);
 
     //std::uint16_t Imagesize = ((this->WIDTH % 8 == 0) ? (this->WIDTH >> 3 ) : ((this->WIDTH >> 3) + 1)) * this->HEIGHT;
     //this->BlackImage       = (std::uint8_t*) malloc(Imagesize);
     //this->RYImage          = (std::uint8_t*) malloc(Imagesize);
 
-    #ifdef DEBUG
+#ifdef DEBUG
     Serial.begin(115200);
-    #endif
+#endif
     // spi
-	// SPI.setDataMode(SPI_MODE0);
-	// SPI.setBitOrder(MSBFIRST);
-	// SPI.setClockDivider(SPI_CLOCK_DIV4);
-	// SPI.begin();
+    // SPI.setDataMode(SPI_MODE0);
+    // SPI.setBitOrder(MSBFIRST);
+    // SPI.setClockDivider(SPI_CLOCK_DIV4);
+    // SPI.begin();
 }
 
-EPD75BHD::~EPD75BHD() {
+EPD75BHD::~EPD75BHD()
+{
     //free(this->BlackImage);
     //free(this->RYImage);
 }
@@ -91,24 +97,27 @@ EPD75BHD::~EPD75BHD() {
 /**
  * Block until the EPD is not busy
  **/
-void EPD75BHD::WaitUntilNotBusy() {
+void EPD75BHD::WaitUntilNotBusy()
+{
     std::uint8_t busy = digitalRead(this->BUSY_PIN);
-    #ifdef DEBUG
+#ifdef DEBUG
     std::printf("e-Paper busy\n");
-    #endif
-    do {
+#endif
+    do
+    {
         busy = digitalRead(this->BUSY_PIN);
     } while (busy);
-    #ifdef DEBUG
+#ifdef DEBUG
     std::printf("e-Paper busy released\n");
-    #endif
+#endif
     delay(200);
 }
 
 /**
  * Hardware reset
  **/
-void EPD75BHD::HW_Reset() {
+void EPD75BHD::HW_Reset()
+{
     digitalWrite(this->RST_PIN, LOW);
     delay(2);
     digitalWrite(this->RST_PIN, HIGH);
@@ -118,14 +127,16 @@ void EPD75BHD::HW_Reset() {
 /**
  * Software reset through a reset command
  **/
-void EPD75BHD::SW_Reset() {
+void EPD75BHD::SW_Reset()
+{
     this->SendCommand(0x12);
 }
 
 /**
  * Initialize EPD
  **/
-void EPD75BHD::Init() {
+void EPD75BHD::Init()
+{
     this->HW_Reset();
     this->SW_Reset();
     this->WaitUntilNotBusy();
@@ -165,101 +176,110 @@ void EPD75BHD::Init() {
     this->SendData(0x00);
 
     this->SendCommand(0x3C); // VBD
-    this->SendData(0x01); // LUT1, for white
+    this->SendData(0x01);    // LUT1, for white
 
     this->SendCommand(0x18);
     this->SendData(0X80);
     this->SendCommand(0x22);
-    this->SendData(0XB1);	//Load Temperature and waveform setting.
+    this->SendData(0XB1); //Load Temperature and waveform setting.
     this->SendCommand(0x20);
-    this->WaitUntilNotBusy();        //waiting for the electronic paper IC to release the idle signal
+    this->WaitUntilNotBusy(); //waiting for the electronic paper IC to release the idle signal
 
     this->SendCommand(0x4E);
     this->SendData(0x00);
     this->SendData(0x00);
-    this->SendCommand(0x4F); 
+    this->SendCommand(0x4F);
     this->SendData(0xAF);
     this->SendData(0x02);
 }
 
 void EPD75BHD::ClearRed(void)
 {
-	std::uint32_t i, j, width, height;
-    width = (this->WIDTH % 8 == 0) ? (this->WIDTH >> 3 ) : ((this->WIDTH >> 3) + 1);
+    std::uint32_t i, j, width, height;
+    width = (this->WIDTH % 8 == 0) ? (this->WIDTH >> 3) : ((this->WIDTH >> 3) + 1);
     height = this->HEIGHT;
-	this->WaitUntilNotBusy();
-	this->SendCommand(0x4F); 
+    this->WaitUntilNotBusy();
+    this->SendCommand(0x4F);
     this->SendData(0xAf);
     this->SendData(0x02);
-	this->SendCommand(0x26);			//RED
-	for (j = 0; j < height; j++) {
-        for (i = 0; i < width; i++){
-			this->SendData(0X00);
-		}
-	}
-	this->SendCommand(0x22);
-	this->SendData(0xC7);
-	this->SendCommand(0x20);
-	delay(200);
-	this->WaitUntilNotBusy();
-	printf("clear EPD\n");
+    this->SendCommand(0x26); //RED
+    for (j = 0; j < height; j++)
+    {
+        for (i = 0; i < width; i++)
+        {
+            this->SendData(0X00);
+        }
+    }
+    this->SendCommand(0x22);
+    this->SendData(0xC7);
+    this->SendCommand(0x20);
+    delay(200);
+    this->WaitUntilNotBusy();
+    printf("clear EPD\n");
 }
 
 void EPD75BHD::ClearBlack(void)
 {
-	std::uint32_t i, j, width, height;
-    width = (this->WIDTH % 8 == 0) ? (this->WIDTH >> 3 ) : ((this->WIDTH >> 3) + 1);
+    std::uint32_t i, j, width, height;
+    width = (this->WIDTH % 8 == 0) ? (this->WIDTH >> 3) : ((this->WIDTH >> 3) + 1);
     height = this->HEIGHT;
-	//this->WaitUntilNotBusy();
-	this->SendCommand(0x4F); 
+    //this->WaitUntilNotBusy();
+    this->SendCommand(0x4F);
     this->SendData(0xAf);
     this->SendData(0x02);
-	this->SendCommand(0x24);			//BLACK
-	for (j = 0; j < height; j++) {
-        for (i = 0; i < width; i++){
-			this->SendData(0XFF);
-		}
-	}
-	this->WaitUntilNotBusy();
+    this->SendCommand(0x24); //BLACK
+    for (j = 0; j < height; j++)
+    {
+        for (i = 0; i < width; i++)
+        {
+            this->SendData(0XFF);
+        }
+    }
+    this->WaitUntilNotBusy();
 }
 
 /**
  * Clear screen
  * Takes 20 secondes!
  **/
-void EPD75BHD::Clear() {
-	std::uint32_t i, j, width, height;
-    width = (this->WIDTH % 8 == 0) ? (this->WIDTH >> 3 ) : ((this->WIDTH >> 3) + 1);
+void EPD75BHD::Clear()
+{
+    std::uint32_t i, j, width, height;
+    width = (this->WIDTH % 8 == 0) ? (this->WIDTH >> 3) : ((this->WIDTH >> 3) + 1);
     height = this->HEIGHT;
-	//this->WaitUntilNotBusy();
-	this->SendCommand(0x4F); 
+    //this->WaitUntilNotBusy();
+    this->SendCommand(0x4F);
     this->SendData(0xAf);
     this->SendData(0x02);
-	this->SendCommand(0x24);			//BLACK
-	for (j = 0; j < height; j++) {
-        for (i = 0; i < width; i++){
-			this->SendData(0XFF);
-		}
-	}
-	//this->WaitUntilNotBusy();
-	delay(400);
-	this->SendCommand(0x4F); 
+    this->SendCommand(0x24); //BLACK
+    for (j = 0; j < height; j++)
+    {
+        for (i = 0; i < width; i++)
+        {
+            this->SendData(0XFF);
+        }
+    }
+    //this->WaitUntilNotBusy();
+    delay(400);
+    this->SendCommand(0x4F);
     this->SendData(0xAf);
     this->SendData(0x02);
-	this->SendCommand(0x26);			//RED
-	for (j = 0; j < height; j++) {
-        for (i = 0; i < width; i++){
-			this->SendData(0X00);
-		}
-	}
-	this->SendCommand(0x22);
-	this->SendData(0xC7);
-	this->SendCommand(0x20);
-	delay(200);
-	this->WaitUntilNotBusy();
-    #ifdef DEBUG
-	std::printf("clear EPD\n");
-    #endif
+    this->SendCommand(0x26); //RED
+    for (j = 0; j < height; j++)
+    {
+        for (i = 0; i < width; i++)
+        {
+            this->SendData(0X00);
+        }
+    }
+    this->SendCommand(0x22);
+    this->SendData(0xC7);
+    this->SendCommand(0x20);
+    delay(200);
+    this->WaitUntilNotBusy();
+#ifdef DEBUG
+    std::printf("clear EPD\n");
+#endif
 }
 
 /**
@@ -268,41 +288,45 @@ void EPD75BHD::Clear() {
 void EPD75BHD::Display(const std::uint8_t *blackimage, const std::uint8_t *ryimage)
 {
     std::uint32_t i, j, width, height;
-    width = (this->WIDTH % 8 == 0)? (this->WIDTH >> 3 ): ((this->WIDTH >> 3) + 1);
+    width = (this->WIDTH % 8 == 0) ? (this->WIDTH >> 3) : ((this->WIDTH >> 3) + 1);
     height = this->HEIGHT;
-	
-	this->SendCommand(0x4F); 
+
+    this->SendCommand(0x4F);
     this->SendData(0xAf);
     this->SendData(0x02);
-	this->SendCommand(0x24);			//BLACK
-	for (j = 0; j < height; j++) {
-        for (i = 0; i < width; i++){
-			this->SendData(blackimage[i + j * width]);
-		}
-	}
-	// this->WaitUntilNotBusy();
-	// this->SendCommand(0x4F); 
+    this->SendCommand(0x24); //BLACK
+    for (j = 0; j < height; j++)
+    {
+        for (i = 0; i < width; i++)
+        {
+            this->SendData(blackimage[i + j * width]);
+        }
+    }
+    // this->WaitUntilNotBusy();
+    // this->SendCommand(0x4F);
     // this->SendData(0xAf);
     // this->SendData(0x02);
-	this->SendCommand(0x26);			//RED
-	for (j = 0; j < height; j++) {
-        for (i = 0; i < width; i++){
-			this->SendData(~ryimage[i + j * width]);
-		}
-	}
-	this->SendCommand(0x22);
-	this->SendData(0xC7);
-	this->SendCommand(0x20);
-	delay(100);
-	this->WaitUntilNotBusy(); 
-	printf("display\n");
+    this->SendCommand(0x26); //RED
+    for (j = 0; j < height; j++)
+    {
+        for (i = 0; i < width; i++)
+        {
+            this->SendData(~ryimage[i + j * width]);
+        }
+    }
+    this->SendCommand(0x22);
+    this->SendData(0xC7);
+    this->SendCommand(0x20);
+    delay(100);
+    this->WaitUntilNotBusy();
+    printf("display\n");
 }
-
 
 /**
  * Takes 20 seconds!
  **/
-void EPD75BHD::Display() {
+void EPD75BHD::Display()
+{
     this->Display(this->BlackImage, this->RYImage);
 }
 
@@ -311,6 +335,6 @@ void EPD75BHD::Display() {
  **/
 void EPD75BHD::DeepSleep(void)
 {
-	this->SendCommand(0x10);  	//deep sleep
+    this->SendCommand(0x10); //deep sleep
     this->SendData(0x01);
 }
