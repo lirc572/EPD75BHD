@@ -1,3 +1,7 @@
+#pragma once
+#ifndef PPMHPP
+#define PPMHPP
+
 #include <FS.h>
 #include <cstdint>
 #include <cstdio>
@@ -262,3 +266,5 @@ std::uint8_t DrawPPM(fs::FS &fs, const char *path, GFX &gfx, std::uint32_t x, st
     //std::printf("file.available() == false:<\n");
     return 0;
 }
+
+#endif
