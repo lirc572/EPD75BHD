@@ -22,10 +22,21 @@
 #include <SD.h>
 #include <SPI.h>
 
+// Singleton (not thread safe)
 class SDC
 {
-public:
-    fs::SDFS *fs;
+private:
+    static SDC* instance;
+    class Deletor
+    {
+    public:
+        ~Deletor() {
+            if (SDC::instance != NULL) {
+                delete SDC::instance;
+            }
+        }
+    };
+    static Deletor deletor;
     SDC()
     {
         if (!SD.begin())
@@ -35,5 +46,16 @@ public:
         }
         this->fs = &SD;
     }
+public:
+    static SDC* getInstance() {
+        if (SDC::instance == NULL) {
+            SDC::instance = new SDC();
+        }
+        return SDC::instance;
+    }
+    fs::SDFS *fs;
 };
+
+SDC* SDC::instance = NULL;
+
 #endif
