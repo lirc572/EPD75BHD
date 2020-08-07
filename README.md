@@ -72,7 +72,7 @@ epd.Clear();
 Print `Hello, world!` in red:
 
 ```C++
-epd.GFXSetCursor(20, 400);
+epd.GFXSetCursor(20, 400); // The cursor is at the bottom left corner of the first character you print
 epd.GFXSetColor(GFXColor::RED);
 epd.GFXPrintf("Hello, world!");
 ```
