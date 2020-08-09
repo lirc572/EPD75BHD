@@ -39,7 +39,7 @@ private:
     static Deletor deletor;
     SDC()
     {
-        if (!SD.begin())
+        if (!SD.begin(5))
         {
             std::printf("Card Mount Failed\n");
             return;
