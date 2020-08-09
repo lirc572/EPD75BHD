@@ -50,6 +50,7 @@ public:
     static SDC* getInstance() {
         if (SDC::instance == NULL) {
             SDC::instance = new SDC();
+            std::printf("SDC Initialized\n");
         }
         return SDC::instance;
     }

@@ -277,7 +277,7 @@ std::uint8_t DrawPPM(fs::FS &fs, const char *path, GFX &gfx, std::uint32_t x, st
  *   2. File type not supported (not P3)
  *   3. File type not supported (Maxval not 1)
  **/
-std::uint8_t PPMGetSize(fs::FS &fs, const char *path, std::uint16_t& width, std::uint16_t& height)
+std::uint8_t PPMGetSize(fs::FS &fs, const char *path, std::uint16_t* width, std::uint16_t* height)
 {
     fs::File file = fs.open(path);
     if (!file)
@@ -286,8 +286,8 @@ std::uint8_t PPMGetSize(fs::FS &fs, const char *path, std::uint16_t& width, std:
         return 1;
     }
     std::uint32_t line_number = 0;
-    width = 0;
-    height = 0;
+    *width = 0;
+    *height = 0;
     while (file.available())
     {
         String line = ReadLine(file);
@@ -319,7 +319,7 @@ std::uint8_t PPMGetSize(fs::FS &fs, const char *path, std::uint16_t& width, std:
                 {
                     if (line[i] >= '0' && line[i] <= '9')
                     {
-                        width = width * 10 + line[i] - '0';
+                        *width = *width * 10 + line[i] - '0';
                     }
                     else
                     {
@@ -330,7 +330,7 @@ std::uint8_t PPMGetSize(fs::FS &fs, const char *path, std::uint16_t& width, std:
                 {
                     if (line[i] >= '0' && line[i] <= '9')
                     {
-                        height = height * 10 + line[i] - '0';
+                        *height = *height * 10 + line[i] - '0';
                     }
                 }
             }
