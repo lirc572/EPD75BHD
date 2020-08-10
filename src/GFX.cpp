@@ -1,4 +1,5 @@
 #include "GFX.hpp"
+#include <Arduino.h>
 #include <cstdlib>
 #include <cstdio>
 #include <cstdarg>
@@ -24,12 +25,20 @@ GFX::GFX(std::uint32_t width, std::uint32_t height) : WIDTH(width), HEIGHT(heigh
 void GFX::InitializeBuffer() {
     //std::printf("Initializing buffer~\n");
     if (this->BlackImage == NULL) {
+        std::printf("Free heap: %d\n", ESP.getFreeHeap());
+        std::printf("Gg to new BlackImage(58096B)\n");
         this->BlackImage = new std::uint8_t[this->Imagesize];
+        std::printf("Newed\n");
         this->GFXClear(this->BlackImage, 0xFF);
+        std::printf("Cleared\n");
     }
     if (this->RYImage == NULL) {
+        std::printf("Free heap: %d\n", ESP.getFreeHeap());
+        std::printf("Gg to new RYImage(58096B)\n");
         this->RYImage = new std::uint8_t[this->Imagesize];
+        std::printf("Newed\n");
         this->GFXClear(this->RYImage, 0xFF);
+        std::printf("Cleared\n");
     }
     //std::printf("Done initializing buffer~\n");
 }
