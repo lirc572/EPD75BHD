@@ -10,21 +10,44 @@ GFX::GFX(std::uint32_t width, std::uint32_t height) : WIDTH(width), HEIGHT(heigh
     this->Imagesize = ((this->WIDTH % 8 == 0) ? (this->WIDTH >> 3) : ((this->WIDTH >> 3) + 1)) * this->HEIGHT;
     this->WIDTHBYTE = (width % 8 == 0) ? (width >> 3) : ((width >> 3) + 1);
     this->HEIGHTBYTE = height;
-    this->BlackImage = new std::uint8_t[this->Imagesize];
-    this->RYImage = new std::uint8_t[this->Imagesize];
+    //this->BlackImage = new std::uint8_t[this->Imagesize];
+    //this->RYImage = new std::uint8_t[this->Imagesize];
     this->ROTATION = 0;
     this->fontColor = GFXColor::BLACK;
     this->font = &FreeSerif9pt7b;
     this->cursorX = 0;
     this->cursorY = 0;
-    this->GFXClear(0xFF);
-    std::printf("Imagesize=%d\nWITHBYTE=%d\nHEIGHTBYTE=%d\n", Imagesize, WIDTHBYTE, HEIGHTBYTE);
+    //this->GFXClear(0xFF);
+    //std::printf("Imagesize=%d\nWITHBYTE=%d\nHEIGHTBYTE=%d\n", Imagesize, WIDTHBYTE, HEIGHTBYTE);
+}
+
+void GFX::InitializeBuffer() {
+    //std::printf("Initializing buffer~\n");
+    if (this->BlackImage == NULL) {
+        this->BlackImage = new std::uint8_t[this->Imagesize];
+        this->GFXClear(this->BlackImage, 0xFF);
+    }
+    if (this->RYImage == NULL) {
+        this->RYImage = new std::uint8_t[this->Imagesize];
+        this->GFXClear(this->RYImage, 0xFF);
+    }
+    //std::printf("Done initializing buffer~\n");
+}
+
+void GFX::DeleteBuffer() {
+    if (this->BlackImage != NULL) {
+        delete[] this->BlackImage;
+        this->BlackImage = NULL;
+    }
+    if (this->RYImage != NULL) {
+        delete[] this->RYImage;
+        this->RYImage = NULL;
+    }
 }
 
 GFX::~GFX()
 {
-    delete[] this->BlackImage;
-    delete[] this->RYImage;
+    this->DeleteBuffer();
 }
 
 void GFX::GFXSetRotation(std::uint16_t rotation)
@@ -53,6 +76,7 @@ void GFX::GFXClear(std::uint16_t color)
 
 void GFX::GFXClear(GFXColor color)
 {
+    this->InitializeBuffer();
     switch (color)
     {
     case GFXColor::BLACK:
@@ -126,6 +150,7 @@ void GFX::GFXClearRect(std::uint8_t *image, std::uint16_t x_start, std::uint16_t
 
 void GFX::GFXSetPixel(std::uint16_t x, std::uint16_t y, GFXColor color)
 {
+    this->InitializeBuffer();
     switch (color)
     {
     case GFXColor::BLACK:
@@ -147,6 +172,7 @@ void GFX::GFXSetPixel(std::uint16_t x, std::uint16_t y, GFXColor color)
 
 void GFX::GFXClearRect(std::uint16_t x_start, std::uint16_t y_start, std::uint16_t x_end, std::uint16_t y_end, GFXColor color)
 {
+    this->InitializeBuffer();
     switch (color)
     {
     case GFXColor::BLACK:

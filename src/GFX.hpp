@@ -37,6 +37,8 @@ public:
     std::uint8_t *BlackImage;
     std::uint8_t *RYImage;
     GFX(std::uint32_t width, std::uint32_t height);
+    void InitializeBuffer();
+    void DeleteBuffer();
     ~GFX();
     void GFXSetFont(const GFXfont *font);
     void GFXSetColor(GFXColor color);
