@@ -35,8 +35,13 @@ void GFX::InitializeBuffer() {
     if (this->RYImage == NULL) {
         std::printf("Free heap: %d\n", ESP.getFreeHeap());
         std::printf("Gg to new RYImage(58096B)\n");
-        this->RYImage = new std::uint8_t[this->Imagesize];
+        //this->RYImage = new std::uint8_t[this->Imagesize];
+        this->RYImage = new std::uint8_t[this->Imagesize/4*3]; //wtf?? how can this even work?
         std::printf("Newed\n");
+        std::printf("Free heap: %d\n", ESP.getFreeHeap());
+        //std::uint8_t* ha = new std::uint8_t[this->Imagesize/4];
+        //std::printf("Free heap: %d\n", ESP.getFreeHeap());
+        //std::printf("(%d, %d)\n", &this->RYImage[this->Imagesize/4*3], ha);
         this->GFXClear(this->RYImage, 0xFF);
         std::printf("Cleared\n");
     }
