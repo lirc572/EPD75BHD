@@ -55,6 +55,38 @@ public:
         return SDC::instance;
     }
     fs::SDFS *fs;
+    bool createDir(const char * path) {
+        Serial.printf("Creating Dir: %s\n", path);
+        return this->fs->mkdir(path);
+    }
+    bool removeDir(const char * path) {
+        Serial.printf("Removing Dir: %s\n", path);
+        return this->fs->rmdir(path);
+    }
+    String readFile(const char * path) {
+        File file = this->fs->open(path);
+        String res;
+        if (!file) {
+            return res;
+        }
+        while (file.available()) {
+            res += file.readString();
+        }
+        file.close();
+        return res;
+    }
+    bool writeFile(const char * path, String s) {
+        File file = this->fs->open(path, FILE_WRITE);
+        if (!file) {
+            return false;
+        }
+        if (file.print(s)) {
+            file.close();
+            return true;
+        }
+        file.close();
+        return false;
+    }
 };
 
 SDC* SDC::instance = NULL;
