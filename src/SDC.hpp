@@ -87,6 +87,18 @@ public:
         file.close();
         return false;
     }
+    bool appendFile(const char * path, String s) {
+        File file = this->fs->open(path, FILE_APPEND);
+        if (!file) {
+            return false;
+        }
+        if (file.print(s)) {
+            file.close();
+            return true;
+        }
+        file.close();
+        return false;
+    }
 };
 
 SDC* SDC::instance = NULL;
